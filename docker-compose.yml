@@ -1,0 +1,55 @@
+networks:
+  ride-request-backend:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+
+services:
+  app:
+    build:
+      args:
+        user: ride-request-backend
+        uid: 1000
+      context: ./.docker/app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./.docker/app/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - ride-request-backend
+
+  ride-request-backend-web:
+    image: nginx
+    container_name: ride-request-backend-web
+    restart: unless-stopped
+    ports:
+      - "8001:80"
+    networks:
+      - ride-request-backend
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx:/etc/nginx/conf.d
+
+  ride-request-backend-db:
+    networks:
+      - ride-request-backend
+    image: mysql:8.3.0
+    container_name: ride-request-backend-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3309:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+

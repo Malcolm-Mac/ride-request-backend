@@ -1,0 +1,23 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Ride Request API Documentation",
+        "description": "API documentation for our application",
+        "contact": {
+            "email": "example@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/users": {
+            "get": {
+                "operationId": "eaf23662692f2a657034cf2e9c9116f0",
+                "responses": {
+                    "200": {
+                        "description": "An example endpoint"
+                    }
+                }
+            }
+        }
+    }
+}
