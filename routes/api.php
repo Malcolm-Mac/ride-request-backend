@@ -44,4 +44,3 @@ Route::group(['prefix' => 'auth'], function () {
         ->middleware('auth')
         ->name('logout');
 });
-
